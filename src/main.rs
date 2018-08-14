@@ -1,3 +1,4 @@
+#![feature(rust_2018_preview)]
 extern crate iron;
 extern crate mysql;
 extern crate webapp;
