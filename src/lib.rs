@@ -1,8 +1,6 @@
 #![feature(rust_2018_preview)]
 #[macro_use]
 extern crate mysql;
-extern crate chrono;
-
 use chrono::prelude::*;
 
 struct Config {
@@ -33,7 +31,7 @@ impl Timestamp {
     }
 }
 
-pub fn get_records(records: Result<mysql::QueryResult, mysql::Error>) -> Vec<Timestamp> {
+pub fn get_records(records: Result<mysql::QueryResult<'_>, mysql::Error>) -> Vec<Timestamp> {
     let records: Vec<Timestamp> = records
         .map(|record| {
             record

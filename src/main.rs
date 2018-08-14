@@ -1,8 +1,4 @@
 #![feature(rust_2018_preview)]
-extern crate iron;
-extern crate mysql;
-extern crate webapp;
-
 use iron::prelude::*;
 use iron::status;
 use webapp::Timestamp;
@@ -17,7 +13,7 @@ fn main() {
     webapp::check_table(&pool);
     webapp::append_timestamp(&pool, &timestamp);
 
-    let hello_world = move |_: &mut Request| -> IronResult<Response> {
+    let hello_world = move |_: &mut Request<'_, '_>| -> IronResult<Response> {
         let timestamps = pool.prep_exec("SELECT * from simple", ());
         let timestamps = webapp::get_records(timestamps);
 
