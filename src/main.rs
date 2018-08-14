@@ -14,30 +14,15 @@ fn main() {
     let pool =
         mysql::Pool::new("mysql://root:kubernetesiseatingtheworld@localhost:3306/test").unwrap();
 
-    pool.prep_exec(
-        r"CREATE TABLE IF NOT EXISTS simple (
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        timestamp TIMESTAMP (6) NOT NULL
-        )",
-        (),
-    ).unwrap();
+    webapp::check_table(&pool);
+    webapp::append_timestamp(&pool, timestamp);
 
-    pool.prep_exec(
-        r"INSERT INTO simple
-        (timestamp)
-        VALUES (:timestamp)",
-        params!{"timestamp" => timestamp.value.naive_utc() },
-    ).unwrap();
-
-    fn hello_world(_: &mut Request) -> IronResult<Response> {
-        let pool = mysql::Pool::new("mysql://root:kubernetesiseatingtheworld@localhost:3306/test")
-            .unwrap();
-
+    let hello_world = move |_: &mut Request| -> IronResult<Response> {
         let timestamps = pool.prep_exec("SELECT * from simple", ());
         let timestamps = webapp::get_records(timestamps);
 
         Ok(Response::with((status::Ok, format!("{:#?}", timestamps))))
-    }
+    };
     let _server = Iron::new(hello_world).http(SERVER_ADDRESS).unwrap();
     println!("Serving on http://{}", SERVER_ADDRESS);
 }
