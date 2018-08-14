@@ -17,6 +17,11 @@ pub struct Timestamp {
     pub id: Option<u32>,
     pub value: DateTime<Utc>,
 }
+impl Default for Timestamp {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl Timestamp {
     pub fn new() -> Self {
@@ -45,7 +50,7 @@ pub fn get_records(records: Result<mysql::QueryResult, mysql::Error>) -> Vec<Tim
 }
 
 pub fn check_table(pool: &mysql::Pool) {
-    let stmt =
+    let _stmt =
         pool.prep_exec(
             r"CREATE TABLE IF NOT EXISTS simple (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -54,8 +59,8 @@ pub fn check_table(pool: &mysql::Pool) {
             (),
         ).unwrap();
 }
-pub fn append_timestamp(pool: &mysql::Pool, timestamp: Timestamp) {
-    let stmt =
+pub fn append_timestamp(pool: &mysql::Pool, timestamp: &Timestamp) {
+    let _stmt =
         pool.prep_exec(
             r"INSERT INTO simple
         (timestamp)
