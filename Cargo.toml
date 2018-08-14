@@ -10,3 +10,4 @@ authors = ["Michael Singh <michael@wadadli.me>"]
 iron = "0.6.0"
 mysql = "14.0.0"
 chrono = "0.4"
+clap = "2"
