@@ -1,3 +1,4 @@
+#![feature(rust_2018_preview)]
 #[macro_use]
 extern crate mysql;
 extern crate chrono;
@@ -41,17 +42,15 @@ pub fn get_records(records: Result<mysql::QueryResult, mysql::Error>) -> Vec<Tim
                     let (id, value) = mysql::from_row(row);
                     let value = DateTime::from_utc(value, Utc);
                     Timestamp { id, value }
-                })
-                .collect()
-        })
-        .unwrap();
+                }).collect()
+        }).unwrap();
 
     records
 }
 
 pub fn check_table(pool: &mysql::Pool) {
-    let _stmt =
-        pool.prep_exec(
+    let _stmt = pool
+        .prep_exec(
             r"CREATE TABLE IF NOT EXISTS simple (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         timestamp TIMESTAMP (6) NOT NULL
@@ -60,8 +59,8 @@ pub fn check_table(pool: &mysql::Pool) {
         ).unwrap();
 }
 pub fn append_timestamp(pool: &mysql::Pool, timestamp: &Timestamp) {
-    let _stmt =
-        pool.prep_exec(
+    let _stmt = pool
+        .prep_exec(
             r"INSERT INTO simple
         (timestamp)
         VALUES (:timestamp)",
