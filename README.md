@@ -10,7 +10,8 @@ The current topology is :
 5. two nat gateways for each private subnet,
 6. an application load balancer per availability zone,
 7. an austoscaling group that deploys several ec2s,
-8. a relational database service per availability zone,
+8. a db.m4.large relational database service instance per availability zone with
+   encryption at rest,
 
 
 Provided that the user is familiar with terraform and has their environment configured correctly, simply clone this repository and run:

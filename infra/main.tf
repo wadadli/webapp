@@ -39,7 +39,7 @@ module "rds" {
 
   engine            = "mysql"
   engine_version    = "5.7.22"
-  instance_class    = "db.t2.micro"
+  instance_class    = "db.m4.large"            #db.t2.micro does not support encryption at rest
   allocated_storage = 20
   multi_az          = true
   apply_immediately = true
