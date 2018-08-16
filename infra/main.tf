@@ -61,6 +61,7 @@ module "rds" {
   major_engine_version = "5.7"
 
   final_snapshot_identifier = "demodb"
+  skip_final_snapshot       = true
 
   vpc_security_group_ids = ["${module.db-sg.this_security_group_id}"]
 }
@@ -182,30 +183,34 @@ output "userdata" {
   value = "${data.template_file.user_data.rendered}"
 }
 
-resource "aws_instance" "test" {
-  count                       = 2
-  ami                         = "ami-18726478"                               # RHEL 7.5
-  instance_type               = "t2.micro"
-  key_name                    = "${aws_key_pair.terraform.key_name}"
-  associate_public_ip_address = true
-  user_data                   = "${data.template_file.user_data.rendered}"
-  subnet_id                   = "${module.vpc.public_subnets[0]}"
-  vpc_security_group_ids      = ["${module.test-sg.this_security_group_id}"]
-}
-
-module "test-sg" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "2.1.0"
-
-  name   = "test-sg"
-  vpc_id = "${module.vpc.vpc_id}"
-
-  ingress_cidr_blocks = ["0.0.0.0/0"]
-
-  ingress_rules = ["ssh-tcp", "http-80-tcp"]
-}
-
 resource "aws_key_pair" "terraform" {
   key_name   = "terraform"
   public_key = "${file("terraform.pub")}"
 }
+
+# TODO: Turn these into bastion
+/*
+ *resource "aws_instance" "test" {
+ *  count                       = 2
+ *  ami                         = "ami-18726478"                               # RHEL 7.5
+ *  instance_type               = "t2.micro"
+ *  key_name                    = "${aws_key_pair.terraform.key_name}"
+ *  associate_public_ip_address = true
+ *  user_data                   = "${data.template_file.user_data.rendered}"
+ *  subnet_id                   = "${module.vpc.public_subnets[0]}"
+ *  vpc_security_group_ids      = ["${module.test-sg.this_security_group_id}"]
+ *}
+ *
+ *module "test-sg" {
+ *  source  = "terraform-aws-modules/security-group/aws"
+ *  version = "2.1.0"
+ *
+ *  name   = "test-sg"
+ *  vpc_id = "${module.vpc.vpc_id}"
+ *
+ *  ingress_cidr_blocks = ["0.0.0.0/0"]
+ *
+ *  ingress_rules = ["ssh-tcp", "http-80-tcp"]
+ *}
+ */
+

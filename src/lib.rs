@@ -49,7 +49,8 @@ pub fn get_records(records: Result<mysql::QueryResult<'_>, mysql::Error>) -> Vec
 pub fn check_table(pool: &mysql::Pool) {
     let _stmt = pool
         .prep_exec(
-            r"CREATE TABLE IF NOT EXISTS simple (
+            r"
+            CREATE TABLE IF NOT EXISTS simple (
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         timestamp TIMESTAMP (6) NOT NULL
         )",

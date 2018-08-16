@@ -4,7 +4,7 @@ use iron::prelude::*;
 use iron::status;
 use webapp::Timestamp;
 
-const SERVER_ADDRESS: &str = "localhost:8000";
+const SERVER_ADDRESS: &str = "0.0.0.0:8000";
 
 fn main() {
     let cli = App::new("dummy-webapp")
@@ -43,25 +43,13 @@ fn main() {
                 .help("Sets the table for to operate on")
                 .takes_value(true)
                 .required(true),
-        ).arg(
-            Arg::with_name("port")
-                .short("P")
-                .long("port")
-                .value_name("PORT")
-                .help("Sets the port to connect to on the host")
-                .takes_value(true)
-                .required(true),
         ).get_matches();
     let username = cli.value_of("user").unwrap();
     let password = cli.value_of("password").unwrap();
     let hostname = cli.value_of("hostname").unwrap();
-    let port = cli.value_of("port").unwrap();
     let table = cli.value_of("table").unwrap();
 
-    let uri = format!(
-        "mysql://{}:{}@{}:{}/{}",
-        username, password, hostname, port, table
-    );
+    let uri = format!("mysql://{}:{}@{}/{}", username, password, hostname, table);
 
     let timestamp = Timestamp::new();
     let pool = mysql::Pool::new(uri).unwrap();
