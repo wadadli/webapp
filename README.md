@@ -1,5 +1,5 @@
 # Terraform autosclaing infrastructure
-This repository contains code that will deploy an autoscaling infrastructure on AWS. It includes a simple web app that I wrote in rust which will connect to a Amazon Relational Database Service.
+This repository contains code that will deploy an autoscaling infrastructure on AWS. It includes a simple web app that I wrote in rust which will connect to an AWS Relational Database Service.
 
 The current topology is :
 
@@ -7,11 +7,11 @@ The current topology is :
 2. a public subnet per availability zone,
 3. a private subnet per availability zone,
 4. a database subnet per availability zone,
-5. two nat gateways for each private subnet,
+5. nat gateways per private subnet,
 6. an application load balancer per availability zone,
 7. an austoscaling group that deploys several ec2s,
 8. a db.m4.large relational database service instance per availability zone with
-   encryption at rest,
+   encryption at rest using AWS Key Management Service,
 
 
 Provided that the user is familiar with terraform and has their environment configured correctly, simply clone this repository and run:
