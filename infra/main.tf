@@ -43,6 +43,8 @@ module "rds" {
   allocated_storage = 20
   multi_az          = true
   apply_immediately = true
+  storage_encrypted = true
+  kms_key_id        = "${aws_kms_key.rds.arn}"
 
   name     = "demodb"
   username = "wadadli"
@@ -186,6 +188,11 @@ output "userdata" {
 resource "aws_key_pair" "terraform" {
   key_name   = "terraform"
   public_key = "${file("terraform.pub")}"
+}
+
+resource "aws_kms_key" "rds" {
+  description             = "KMS key for encrypting rds storage"
+  deletion_window_in_days = 7
 }
 
 # TODO: Turn these into bastion
