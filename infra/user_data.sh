@@ -1,5 +1,5 @@
 #!/bin/bash
-yum update --asumeyes
+yum update --assumeyes
 yum-config-manager --enable rhui-REGION-rhel-server-extras
 yum install docker --assumeyes
 systemctl enable --now docker
